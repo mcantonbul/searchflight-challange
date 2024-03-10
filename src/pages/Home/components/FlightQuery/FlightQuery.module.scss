@@ -1,0 +1,16 @@
+.container {
+    display: flex;
+    gap: 8px;
+    padding: 40px;
+    margin: 0px auto;
+    background-color: rgb(96 105 119 / 60%);
+
+    .submitButton {
+        height: 50px;
+        width: 50px;
+        cursor: pointer;
+        border: 0;
+        color: white;
+        background-color: #E81932;
+    }
+}

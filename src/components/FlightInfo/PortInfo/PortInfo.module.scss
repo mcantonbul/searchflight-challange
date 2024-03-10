@@ -1,0 +1,21 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    color: rgb(138 140 139);
+    padding: 20px 10px;
+
+    .time {
+        font-weight: 600;
+        color: rgb(94 102 100);
+        font-size: 20px;
+    }
+
+    .code {
+        font-size: 16px;
+    }
+
+    .city {
+        font-size: 12px;
+    }
+}

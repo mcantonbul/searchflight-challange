@@ -1,0 +1,18 @@
+.container {
+    display: flex;
+    gap: 30px;
+    width: 100%;
+    padding: 20px;
+    background-color: white;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+
+    position: relative;
+
+    .after {
+        height: 30px;
+        width: 260px;
+        top: -30px;
+        position: absolute;
+        background-color: white;
+    }
+}

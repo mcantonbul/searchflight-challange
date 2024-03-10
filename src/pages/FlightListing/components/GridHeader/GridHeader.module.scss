@@ -1,0 +1,29 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    gap: 30px;
+    padding: 10px 20px;
+    color: white;
+    background-color: rgb(36 42 56);
+
+    .sortOptions {
+        div {
+            cursor: pointer;
+            padding: 10px 20px;
+            border: 1px solid white;
+            border-radius: 4px;
+            font-weight: 600;
+            display: inline-block;
+
+            &:last-child {
+                margin-left: 10px;
+            }
+
+            &:hover {
+                background-color: white;
+                color: rgb(36 42 56);
+            }
+        }
+    }
+}

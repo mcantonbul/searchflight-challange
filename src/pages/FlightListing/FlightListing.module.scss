@@ -1,0 +1,23 @@
+.container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+
+    .fly {
+        width: fit-content;
+        padding: 5px 40px;
+        background-color: red;
+        color: white;
+        font-weight: 600;
+        font-size: 14px;
+        margin-bottom: 12px;
+    }
+
+    .cityInfo {
+        font-size: 24px;
+    }
+
+    .promotionCode {
+        margin: 20px 0px;
+    }
+}

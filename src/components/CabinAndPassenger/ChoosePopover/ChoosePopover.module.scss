@@ -1,0 +1,67 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    background-color: white;
+    gap: 20px;
+    padding: 20px;
+    height: fit-content;
+    top: 60px;
+    right: -50px;
+    width: 300px;
+    .title {
+        font-size: 16px;
+        color: rgb(147 147 147);
+    }
+
+    .cables {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+
+        .radio {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            color: rgb(171 171 171);
+        }
+    }
+
+    .passengerContainer {
+        display: flex;
+        justify-content: space-between;
+        color: black;
+        font-size: 18px;
+
+        .buttons {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            button {
+                cursor: pointer;
+                user-select: none;
+                border: 0;
+                width: 30px;
+                height: 30px;
+            }
+        }
+    }
+
+    &::before {
+        content: "";
+        position: absolute;
+        left: 35%;
+        right: 0;
+        top: -5px;
+        margin: 0 auto;
+        width: 0;
+        height: 0;
+        border-bottom: 5px solid white;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+    }
+}

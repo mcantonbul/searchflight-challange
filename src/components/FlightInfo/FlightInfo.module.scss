@@ -1,0 +1,26 @@
+.container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 10px 30px 10px 10px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+
+    .seperator {
+        height: 1px;
+        width: 100%;
+        background-color: black;
+    }
+
+    .duration {
+        font-size: 12px;
+        width: 200px;
+        > div {
+            margin-top: 4px;
+            font-weight: 600;
+            font-size: 16px;
+        }
+    }
+    
+}

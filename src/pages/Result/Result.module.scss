@@ -1,0 +1,46 @@
+.container {
+    .header {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 20px;
+        .description {
+            font-size: 32px;
+        }
+        .successIcon {
+            color: green;
+        }
+        .errorIcon {
+            color: red;
+        }
+    }
+
+    .footer {
+        padding: 20px;
+        border-top: 1px solid gray;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .totalPrice {
+            font-size: 40px;
+            color: rgb(103 102 107);
+        }
+
+        .amount {
+            font-size: 24px;
+            font-weight: 600;
+            color: rgb(45 89 151);
+        }
+
+        .error {
+            padding: 15px 30px;
+            background-color: red;
+            color: white;
+            font-size: 16px;
+            margin-left: auto;
+            cursor: pointer;
+        }
+    }
+
+}
