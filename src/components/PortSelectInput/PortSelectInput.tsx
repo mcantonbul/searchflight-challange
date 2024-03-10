@@ -23,7 +23,7 @@ interface PortSelectInputProps {
 const PortSelectInput = forwardRef(({ icon, options, placeholder }: PortSelectInputProps, ref) => {
   const selectRef = useRef<SelectInstance>(null);
 
-  const formatOptionLabel = (data: any, opt: any) => {
+  const formatOptionLabel = (data: any) => {
     return <div className={s.option}><FontAwesomeIcon icon={icon} />{data?.label}</div>;
   };
 
