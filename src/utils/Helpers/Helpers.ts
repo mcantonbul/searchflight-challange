@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { CabinEnum } from "@/enums/CabinEnum";
 
 const saveToLocalStorage = (key: string, value: string) => {
@@ -24,4 +25,18 @@ const getCabinEnumValue = (fareCategoryFieldName: string) => {
     }
 };
 
-export { saveToLocalStorage, getFareCategoryFieldName, getCabinEnumValue };
+const getSearchParamValues = (searchParams:URLSearchParams) => {
+  const originAirportCode = searchParams.get("ori");
+  const destinationAirportCode = searchParams.get("des");
+  const cabin: CabinEnum =(searchParams.get("cab") as any as CabinEnum) || CabinEnum.Economy;
+  const passenger = searchParams.get("pas");
+
+  return {
+    originAirportCode,
+    destinationAirportCode,
+    cabin,
+    passenger
+  }
+}
+
+export { saveToLocalStorage, getFareCategoryFieldName, getCabinEnumValue, getSearchParamValues };

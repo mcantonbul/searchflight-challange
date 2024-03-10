@@ -1,24 +1,50 @@
-import { Dispatch, ReactNode, SetStateAction, createContext, useEffect, useState } from "react";
+/* eslint-disable no-case-declarations */
+import {
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  createContext,
+  useEffect,
+  useState,
+} from "react";
 
 /** Services */
 import FlightService from "@/services/FlightService/FlightService";
 
 /** Models */
-import { Airport, Flights, PromotionOptions, SelectedPackage, SelectedFlight } from "@/models";
+import {
+  Airport,
+  Flights,
+  PromotionOptions,
+  SelectedPackage,
+  SelectedFlight,
+  Flight,
+  SearchParams,
+} from "@/models";
 
 /** Utils */
-import { saveToLocalStorage } from "@/utils/Helpers/Helpers";
+import {
+  getFareCategoryFieldName,
+  saveToLocalStorage,
+} from "@/utils/Helpers/Helpers";
+
+/** Enums */
+import { SortTypeEnum } from "@/enums/GridEnums";
 
 interface IFlightContext {
   airports?: Array<Airport>;
   flights?: Flights;
   promotionOpt: PromotionOptions;
   setPromotionOpt: Dispatch<SetStateAction<PromotionOptions>>;
-  setSelectedPackage:  Dispatch<SetStateAction<SelectedPackage | undefined>>;
+  setSelectedPackage: Dispatch<SetStateAction<SelectedPackage | undefined>>;
   selectedPackage?: SelectedPackage;
   selectedFlight?: SelectedFlight;
-  setSelectedFlight:  Dispatch<SetStateAction<SelectedFlight | undefined>>;
-  clearContext: ()=> void;
+  setSelectedFlight: Dispatch<SetStateAction<SelectedFlight | undefined>>;
+  clearContext: () => void;
+  sortedFlights?: Flight[];
+  sortType?: SortTypeEnum;
+  setSortType: Dispatch<SetStateAction<SortTypeEnum | undefined>>;
+  setSearchParams: Dispatch<SetStateAction<SearchParams | undefined>>;
 }
 
 export const FlightContext = createContext<IFlightContext>({
@@ -26,12 +52,16 @@ export const FlightContext = createContext<IFlightContext>({
   flights: undefined,
   promotionOpt: {
     discounts: [],
-    unavailableBrands: []
+    unavailableBrands: [],
   },
   setPromotionOpt: () => {},
   setSelectedPackage: () => {},
   setSelectedFlight: () => {},
-  clearContext: ()=> {}
+  clearContext: () => {},
+  sortedFlights: [],
+  sortType: SortTypeEnum.Price,
+  setSortType: () => {},
+  setSearchParams: () => {},
 });
 
 interface FlightContextProviderProps {
@@ -49,6 +79,10 @@ const FlightContextProvider = ({ children }: FlightContextProviderProps) => {
   });
   const [selectedPackage, setSelectedPackage] = useState<SelectedPackage>();
   const [selectedFlight, setSelectedFlight] = useState<SelectedFlight>();
+  const [sortType, setSortType] = useState<SortTypeEnum | undefined>(
+    SortTypeEnum.Price
+  );
+  const [searchParams, setSearchParams] = useState<SearchParams>();
 
   const prepareAirports = (flightData: Flights) => {
     const flightAirports = new Array<Airport>();
@@ -97,6 +131,47 @@ const FlightContextProvider = ({ children }: FlightContextProviderProps) => {
     }
   };
 
+  const filteredFlights = (() => {
+    if(searchParams) {
+      return flights?.flights.filter(
+        (flight) =>
+          flight.fareCategories[
+            getFareCategoryFieldName(+searchParams.cabin!)
+          ] &&
+          flight.originAirport.code === searchParams.originAirportCode &&
+          flight.destinationAirport.code === searchParams.destinationAirportCode
+      );
+    }
+    })() || [];
+
+  const sortedFlights = filteredFlights.sort((a, b) => {
+      switch (sortType) {
+        case SortTypeEnum.Time:
+          const aTime = a.arrivalDateTimeDisplay.split(":");
+          const bTime = b.arrivalDateTimeDisplay.split(":");
+
+          if (aTime[0] === bTime[0]) {
+            return Number(aTime[1]) - Number(bTime[1]);
+          } else {
+            return Number(aTime[0]) - Number(bTime[0]);
+          }
+        case SortTypeEnum.Price:
+        default:
+          const aEcoFly = a.fareCategories.ECONOMY.subcategories.find(
+            (s) => s.brandCode === "ecoFly"
+          );
+          const bEcoFly = b.fareCategories.ECONOMY.subcategories.find(
+            (s) => s.brandCode === "ecoFly"
+          );
+
+          if (aEcoFly && bEcoFly) {
+            return aEcoFly.price.amount - bEcoFly.price.amount;
+          }
+          break;
+      }
+      return 1;
+    });
+
   const clearContext = () => {
     setSelectedPackage(undefined);
     setSelectedFlight(undefined);
@@ -129,7 +204,11 @@ const FlightContextProvider = ({ children }: FlightContextProviderProps) => {
         setSelectedPackage,
         selectedFlight,
         setSelectedFlight,
-        clearContext
+        clearContext,
+        setSortType,
+        sortedFlights,
+        sortType,
+        setSearchParams
       }}
     >
       {children}

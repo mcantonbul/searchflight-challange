@@ -24,12 +24,8 @@ import { FlightContext } from "@/contexts/FlightContext/FlightContext";
 /** Styles */
 import s from "./GridBody.module.scss";
 
-interface GridBodyProps {
-  flights: Flight[];
-}
-
-const GridBody = ({ flights }: GridBodyProps) => {
-  const { promotionOpt, selectedFlight, setSelectedFlight } =
+const GridBody = () => {
+  const { promotionOpt, selectedFlight, setSelectedFlight, sortedFlights } =
     useContext(FlightContext);
 
   const handleOnChangeCabin = (flightIndex: number, cabin: CabinEnum) => {
@@ -115,10 +111,10 @@ const GridBody = ({ flights }: GridBodyProps) => {
 
   return (
     <div className={s.container}>
-      {flights.map((flight, index) => (
+      {sortedFlights?.map((flight, index) => (
         <div className={s.flight} key={index}>
           <FlightInfo
-            arrivalDateTimeDisplay={flight.arrivalDateTimeDisplay}
+            arrivalDateTimeDisplay={flight.departureDateTimeDisplay}
             departureDateTimeDisplay={flight.arrivalDateTimeDisplay}
             destinationAirport={flight.destinationAirport}
             flightDuration={flight.flightDuration}

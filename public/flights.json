@@ -509,6 +509,52 @@
             "departureDateTimeDisplay": "19:50",
             "flightDuration": "1s 30d",
             "fareCategories": {
+                "BUSINESS": {
+                    "subcategories": [
+                        {
+                            "brandCode": "ecoFly",
+                            "price": {
+                                "amount": 670.00,
+                                "currency": "TRY"
+                            },
+                            "order": 1,
+                            "status": "AVAILABLE",
+                            "rights": [
+                                "20 kg Bagaj",
+                                "Ucresiz Yemek Secimi"
+                            ]
+                        },
+                        {
+                            "brandCode": "extraFly",
+                            "price": {
+                                "amount": 956.00,
+                                "currency": "TRY"
+                            },
+                            "order": 2,
+                            "status": "AVAILABLE",
+                            "rights": [
+                                "30 kg Bagaj",
+                                "Standart Koltuk Secimi",
+                                "Ucresiz Yemek Secimi"
+                            ]
+                        },
+                        {
+                            "brandCode": "primeFly",
+                            "price": {
+                                "amount": 1358.00,
+                                "currency": "TRY"
+                            },
+                            "order": 3,
+                            "status": "AVAILABLE",
+                            "rights": [
+                                "50 kg Bagaj",
+                                "Standart Koltuk Secimi",
+                                "Ucretsiz Degisiklik",
+                                "Ucresiz Yemek Secimi"
+                            ]
+                        }
+                    ]
+                },
                 "ECONOMY": {
                     "subcategories": [
                         {

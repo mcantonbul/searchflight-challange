@@ -1,4 +1,4 @@
-import { useContext, useEffect, useLayoutEffect, useMemo } from "react";
+import { useContext, useEffect } from "react";
 
 /** React-Router-Dom */
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -13,10 +13,9 @@ import { ThemaContext } from "@/contexts/ThemaContext/ThemaContext";
 import { FlightContext } from "@/contexts/FlightContext/FlightContext";
 
 /** Helpers */
-import { getFareCategoryFieldName } from "@/utils/Helpers/Helpers";
+import { getFareCategoryFieldName, getSearchParamValues } from "@/utils/Helpers/Helpers";
 
 /** Enums */
-import { CabinEnum } from "@/enums/CabinEnum";
 import { StatusEnum } from "@/enums/StatusEnum";
 
 /** Models */
@@ -32,19 +31,19 @@ const FlightListing = () => {
   const { changeThema } = useContext(ThemaContext);
   const {
     airports,
-    flights,
     setPromotionOpt,
     selectedPackage,
     selectedFlight,
     clearContext,
+    setSearchParams,
+    sortedFlights
   } = useContext(FlightContext);
 
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  const navigate = useNavigate();
-
   const handleOnChangePromotionCode = (checked: boolean) => {
-    if(checked) {
+    if (checked) {
       setPromotionOpt({
         unavailableBrands: ["extraFly", "primeFly"],
         discounts: [{ brandCode: "ecoFly", discountRate: 50 }],
@@ -57,53 +56,42 @@ const FlightListing = () => {
     }
   };
 
-  const originAirportCode = searchParams.get("ori");
+  const { destinationAirportCode, originAirportCode, passenger, cabin } =
+    getSearchParamValues(searchParams);
+
+  const destinationAirport = airports?.find(
+    (airport) => airport.code === destinationAirportCode
+  );
   const originAirport = airports?.find(
     (airport) => airport.code === originAirportCode
   );
 
-  const destinationAirportCode = searchParams.get("des");
-  const destinationAirport = airports?.find(
-    (airport) => airport.code === destinationAirportCode
-  );
+  useEffect(() => {
+    if (selectedPackage && selectedFlight && sortedFlights) {
+      const findedFlight = sortedFlights[selectedFlight.index].fareCategories[
+        getFareCategoryFieldName(selectedFlight.cabin)
+      ].subcategories.find((s) => s.brandCode === selectedPackage.brandCode);
 
-  const cabin = searchParams.get("cab") || CabinEnum.Economy;
-  const passenger = searchParams.get("pas");
-
-  const filteredFlights =
-    useMemo(() => {
-      return flights?.flights.filter(
-        (flight) =>
-          flight.fareCategories[getFareCategoryFieldName(+cabin)] &&
-          flight.originAirport.code === originAirportCode &&
-          flight.destinationAirport.code === destinationAirportCode
-      );
-    }, [flights, searchParams]) || [];
-
-    useEffect(() => {
-      if (selectedPackage && selectedFlight && flights) {
-        const findedFlight = flights.flights[selectedFlight.index].fareCategories[
-          getFareCategoryFieldName(selectedFlight.cabin)
-        ].subcategories.find((s) => s.brandCode === selectedPackage.brandCode);
-  
-        if(findedFlight) {
-          const result: ResultModel = {
-            success: findedFlight.status === StatusEnum.Available,
-            price: {
-              amount: findedFlight.price.amount * 5,
-              currency: findedFlight.price.currency
-            }
-          };
-          localStorage.setItem('result', JSON.stringify(result));
-          clearContext();
-          navigate({pathname: '/result'})
-        }
+      if (findedFlight) {
+        const result: ResultModel = {
+          success: findedFlight.status === StatusEnum.Available,
+          price: {
+            amount: findedFlight.price.amount * 5,
+            currency: findedFlight.price.currency,
+          },
+        };
+        localStorage.setItem("result", JSON.stringify(result));
+        clearContext();
+        navigate({ pathname: "/result" });
       }
-    }, [selectedPackage]);
+    }
+  }, [selectedPackage]);
 
-  useLayoutEffect(() => {
+  useEffect(()=>{
     changeThema(FlightListingThema);
-  }, []);
+    if (destinationAirportCode && originAirportCode && cabin)
+      setSearchParams({ destinationAirportCode, originAirportCode, cabin });
+  },[])
 
   return (
     <Layout>
@@ -117,7 +105,7 @@ const FlightListing = () => {
           onChange={handleOnChangePromotionCode}
           className={s.promotionCode}
         />
-        <TicketGrid flights={filteredFlights} />
+        <TicketGrid />
       </div>
     </Layout>
   );

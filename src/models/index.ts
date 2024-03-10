@@ -98,4 +98,10 @@ export interface ResultModel {
     price?: Price
 }
 
+export interface SearchParams {
+    cabin?: CabinEnum
+    originAirportCode?: string
+    destinationAirportCode?: string
+}
+
 export type PassengerReducerActionType = 'INCREMENT' | 'DECREMENT';
